@@ -1,0 +1,18 @@
+# Required Python Packages
+pandas 
+numpy 
+matplotlib 
+seaborn 
+plotly 
+scikit-learn 
+jupyter 
+scipy 
+statsmodels 
+beautifulsoup4 
+requests 
+folium 
+geopandas
+ruff
+openpyxl 
+xlrd
+pandas-profiling
