@@ -1,154 +1,143 @@
-Car Price Prediction Model
+# Car Price Prediction — Case Study
 
-This project is a data-driven case study to predict the selling price of used cars. Using a dataset of car details, we perform comprehensive data cleaning, exploratory data analysis (EDA), feature engineering, and predictive modeling.
+**A data-driven pricing model for used cars**
 
-The primary goal is to build a regression model that accurately estimates car prices based on features like mileage, transmission, condition, make, model, and car_age.
+---
 
-Table of Contents
+## Overview
 
-    Project Overview
+This project implements a full end-to-end workflow for predicting used-car selling prices from raw marketplace data: data cleaning, exploratory data analysis (EDA), feature engineering, model training, evaluation, and interpretation. It was built as part of a group case study and demonstrates practical skills in data engineering, machine learning, and storytelling for business stakeholders.
 
-    Dataset
+---
 
-    Methodology
+## Highlights
 
-        1. Data Cleaning & Preprocessing
+* End-to-end reproducible pipeline: data ingestion → preprocessing → EDA → model training → evaluation.
+* Feature engineering tailored to automotive pricing (parsing combined `Name` field into make/model/year/engine/color, car age calculation, mileage transformations).
+* Rigorous evaluation using MAE, RMSE, and R² and model-interpretability (feature importance).
+* Clear visualizations to support recommendations to a dealership (price distributions, brand-level analysis, mileage vs price relationships).
 
-        2. Exploratory Data Analysis (EDA)
+---
 
-        3. Feature Engineering
+## Dataset
 
-        4. Model Building & Evaluation
+The dataset contains the following core columns used in modelling:
 
-    Key Findings & Results
+* `price` — selling price (target)
+* `transmission` — gearbox type (e.g., Automatic, Manual)
+* `condition` — vehicle condition (e.g., Foreign Used)
+* `mileage` — distance driven (km)
+* `Name` — combined string containing manufacturer, model, year, engine and color (e.g., `Toyota Premio 2015 1.8 FWD Black`)
 
-    Technologies Used
+(See project materials for the raw dataset and additional metadata.)
 
-    How to Run This Project
+---
 
-    Contributors
+## Approach
 
-Project Overview
+1. **Data cleaning & parsing**
 
-The objective of this project is to develop a robust pricing model for a car dealership. By analyzing historical sales data, we identify the key factors that influence a car's price. The final output is a machine learning model trained to predict prices, which can help the dealership optimize its pricing strategy.
+   * Split `Name` into `make`, `model`, `year`, `engine_info`, and `color`.
+   * Convert `year` to numeric and compute `car_age = current_year - year`.
+   * Handle missing values and outliers.
+   * Encode categorical variables (one-hot or label encoding where appropriate) and scale numeric features.
 
-The full analysis and model development process is available in the data_model2.ipynb notebook.
+2. **Exploratory Data Analysis (EDA)**
 
-Dataset
+   * Identify most common brands and models.
+   * Inspect price distribution and outliers.
+   * Analyze relationships between mileage, age and price.
+   * Compare price across transmission types and conditions.
 
-The dataset (CarPrice.csv) contains the following columns:
+3. **Modeling**
 
-    price: Selling price of the car (Target Variable)
+   * Train regression algorithms: baseline Linear Regression and Random Forest.
+   * Use cross-validation and a hold-out test set.
+   * Evaluate with MAE, RMSE and R².
+   * Extract top features influencing price.
 
-    transmission: Gearbox type (e.g., Automatic, Manual)
+---
 
-    condition: Vehicle condition (e.g., Foreign Used)
+## Results & Interpretation
 
-    mileage: Distance the vehicle has been driven (in km)
+* Best model: `RandomForestRegressor`
+* Test MAE: **157097.3990**
+* Test RMSE: **688122.8292**
+* Test R²: **0.9327**
 
-    Name: A combined string of manufacturer, model, year, engine, and color.
+Top features: `car_age`, `mileage`, `model`, `engine_size`
 
-Methodology
+**Key Insight:** The analysis showed that car age and engine size are the strongest predictors of price, with premium model cars commanding a significant price premium over other brands counterparts.
 
-The project followed a structured data science workflow:
+---
 
-1. Data Cleaning & Preprocessing
+## How to run (reproducible)
 
-    Parsed the Name column: Split the single string into new, usable features: make, model, year, engine_info, and color.
+1. Clone the repository:
 
-    Handled Missing Values: Implemented strategies to manage any missing data to ensure model stability.
-
-    Corrected Data Types: Converted year and price to numeric types for calculation.
-
-2. Exploratory Data Analysis (EDA)
-
-    Analyzed the distribution of car prices to understand the target variable.
-
-    Identified the most common car brands and models in the dataset.
-
-    Explored relationships between key features (like mileage, car_age, and transmission) and the price.
-
-3. Feature Engineering
-
-    Created car_age: Engineered a new feature by subtracting the year from the current year (e.g., 2024), which is often more predictive than the manufacturing year itself.
-
-    Encoded Categorical Features: Converted categorical columns like transmission, condition, and make into a numerical format (e.g., One-Hot Encoding) for the model.
-
-4. Model Building & Evaluation
-
-    Split the Data: The dataset was divided into training and testing sets (e.g., 80% train, 20% test) to evaluate the model's performance on unseen data.
-
-    Trained Regression Models: Implemented and compared multiple regression algorithms (e.g., Linear Regression, Random Forest Regressor, Gradient Boosting).
-
-    Evaluated Performance: Assessed the models using standard regression metrics.
-
-Key Findings & Results
-
-After training and evaluation, the Random Forest Regressor was selected as the best-performing model.
-
-    Model Performance:
-
-        R-squared (R²): 0.9327
-
-        Mean Absolute Error (MAE): 157097.3990
-
-        Root Mean Squared Error (RMSE): 688122.8292
-
-    Top 4 Features Influencing Price:
-
-        Feature 1, engine_size
-
-        Feature 2, car_age
-
-        Feature 3, car model
-
-        Feature 4, mileage
-
-
-    Key Insight: The analysis showed that car age and engine size are the strongest predictors of price, with premium model cars commanding a significant price premium over other brands counterparts.
-
-Technologies Used
-
-    Python
-
-    Pandas: For data manipulation and analysis.
-
-    NumPy: For numerical operations.
-
-    Matplotlib & Seaborn: For data visualization.
-
-    Scikit-learn (sklearn): For data preprocessing, feature engineering, and machine learning modeling.
-
-    Jupyter Notebook: For interactive development and analysis.
-
-How to Run This Project
-
-    Clone the repository:
-    Bash
-
+```bash
 git clone https://github.com/csaafrica/Group-9-Car-Price-Prediction.git
 cd Group-9-Car-Price-Prediction
+```
 
-Create a virtual environment (Recommended):
-Bash
+2. Create and activate a virtual environment (recommended):
 
+```bash
 python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+source venv/bin/activate   # macOS / Linux
+venv\Scripts\activate    # Windows
+```
 
-Install the required libraries:
-Bash
+3. Install dependencies:
 
+```bash
 pip install -r requirements.txt
+```
 
-Launch Jupyter Notebook:
-Bash
+4. Open the notebooks or run the scripts in `src/` to reproduce the steps:
 
-    jupyter notebook
+* `notebooks/` — exploratory notebooks and modelling experiments.
+* `src/` — modular code (preprocessing, training, evaluation).
 
-Contributors
+5. Re-run experiments and export results (example):
 
-    Max Kinyua - Team Lead
+```bash
+# if there is a train script available
+python src/train.py --data data/raw/cars.csv --out results/
+```
 
-    Vallarie Wakhula
+---
 
-    Angelica Ogato
+## Repository structure
+
+```
+/Group-9-Car-Price-Prediction
+├─ notebooks/            # EDA and modelling notebooks
+├─ src/                  # Source code: preprocessing, model training, helpers
+├─ data/                 # (not stored in repo) raw and processed data
+├─ requirements.txt
+├─ README.md
+└─ LICENSE
+```
+
+---
+
+## Skills demonstrated
+
+* Python, pandas, scikit-learn
+* EDA & data visualization (matplotlib / seaborn)
+* Feature engineering & preprocessing
+* Model building & evaluation (regression)
+* Clear storytelling and business-oriented recommendations
+
+---
+## Contributors
+
+* Max Kinyua - Team Lead
+* Vallarie Wakhula
+* Angelica Ogato
+---
+
+License: MIT
+
+---
